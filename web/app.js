@@ -177,6 +177,18 @@ function monthSimpleOption() {
     ],
   });
 }
+function mainTable() {
+  const lvl = (i) => `<i style="background:${lv(i)}"></i>${LEVELS[i]}`;
+  if (range === "day") {
+    $("table-cap").textContent = "Today's hourly numbers: predicted and counted";
+    return `<table><thead><tr><th>Hour</th><th>Busyness</th><th>Predicted</th><th>Likely range</th><th>Counted</th><th>Typical</th></tr></thead><tbody>${
+      FC.days[0].hours.map((h) => `<tr><td>${fmtH(h.hour)}</td><td>${lvl(h.level)}</td><td>${n0(h.pred)}</td><td>${n0(h.p10)}–${n0(h.p90)}</td><td>${h.observed ?? "–"}</td><td>${n0(h.typical)}</td></tr>`).join("")}</tbody></table>`;
+  }
+  const days = range === "week" ? FC.days.slice(0, 7).map((d) => ({ ...d, peak_level: Math.max(...d.hours.map((h) => h.level)), detailed: true })) : monthDays().slice(0, 30);
+  $("table-cap").textContent = range === "week" ? "Daily numbers for the next 7 days" : "Daily numbers for the next 30 days";
+  return `<table><thead><tr><th>Day</th><th>Busiest hour</th><th>Predicted boardings</th><th>Likely range</th><th>Based on</th></tr></thead><tbody>${
+    days.map((d) => `<tr><td>${prettyDate(d.date)}</td><td>${lvl(d.peak_level)}</td><td>${n0(d.total)}</td><td>${n0(d.total_p10)}–${n0(d.total_p90)}</td><td>${d.detailed ? "weather forecast" : "typical for the date"}</td></tr>`).join("")}</tbody></table>`;
+}
 async function renderMain() {
   const cap = $("chart-cap"), leg = $("chart-legend");
   if (range === "day") {
@@ -194,6 +206,7 @@ async function renderMain() {
       `<span>Lines: likely range. After the first week, bars show what is typical for the date (no weather yet).</span>`;
     chart("c-today").setOption(monthSimpleOption(), true);
   }
+  $("main-table").innerHTML = mainTable();
 }
 function renderToday() {
   const d = FC.days[0];

@@ -205,3 +205,8 @@ h2.sec { font-size: 1.35rem; letter-spacing: -0.02em; margin: 26px 0 6px; }
 .tabbar .range { margin: 4px 0; }
 .tabbar .range[hidden] { display: none; }
 .chart-cap { margin: 10px 0 0; font-weight: 700; font-size: 0.95rem; }
+
+.numbers { margin: 4px 0 0; }
+.tablewrap { overflow-x: auto; }
+.tablewrap table { min-width: 460px; }
+.tablewrap td i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
