@@ -188,6 +188,8 @@ uv run python -m model.backtest && uv run python -m reports.make_model_report
 
 ## Data sources and licences
 
+Code: MIT (`LICENSE`). Data and bundled libraries keep their own licences: see `NOTICE.md`.
+
 | source | used for | licence / attribution |
 |---|---|---|
 | City of Toronto Open Data: [Toronto Island Ferry Ticket Counts](https://open.toronto.ca/dataset/toronto-island-ferry-ticket-counts/) | target variable | Open Government Licence - Toronto. *"Contains information licensed under the Open Government Licence - Toronto."* |

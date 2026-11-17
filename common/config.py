@@ -23,7 +23,8 @@ TERMINAL_LAT = 43.6405
 TERMINAL_LON = -79.3755
 
 SITE_URL = os.environ.get("SITE_URL", "https://ferries.agniv.site").rstrip("/")
-USER_AGENT = "toronto-ferry-forecaster/0.1 (open-source; +https://github.com/)"
+REPO_URL = "https://github.com/AGNIV03/ferryForecasterTO"
+USER_AGENT = f"toronto-ferry-forecasts/1.0 (open-source; +{REPO_URL})"
 
 # City of Toronto CKAN
 CKAN = "https://ckan0.cf.opendata.inter.prod-toronto.ca"

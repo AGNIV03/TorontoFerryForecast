@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Toronto Island Ferry Crowd Forecaster contributors
+Copyright (c) 2026 Agniv (AGNIV03) and Toronto Ferry Forecasts contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,4 +21,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 The data used and archived by this software is NOT covered by this licence; see
-the "Data sources and licences" section of README.md.
+NOTICE.md and the "Data sources and licences" section of README.md.
