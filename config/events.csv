@@ -1,0 +1,5 @@
+date_start,date_end,name,zone,kind,expected_effect,source,notes,series
+2017-05-01,2017-07-30,Lake Ontario flooding - Island closed to public,island,closure,down,"City of Toronto news releases 2017; confirmed in ticket data",Island access restricted to residents; excluded from training,
+2020-03-14,2021-06-30,COVID-19 closures and capacity limits,island,closure,down,"Ticket data (3-35% of normal volume)",Excluded from training,
+2021-07-01,2021-12-31,COVID-19 recovery period,island,capacity_limit,down,"Ticket data (50-90% of normal volume)",Kept with indicator and half weight,
+2022-08-20,2022-09-05,Sam McBride out of service after dock crash; modified schedule,island,service_disruption,down,"Global News 2022-08-21",Capacity override in config/capacity.json,

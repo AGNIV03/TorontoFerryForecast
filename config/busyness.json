@@ -1,0 +1,4 @@
+{
+  "_doc": "How busyness levels are defined (Quiet < p50 <= Moderate < p80 <= Busy < p95 <= Very busy of historical hourly boardings, 06:00-23:59, normal-regime days). 'all' (default): one year-round scale, so 'Busy' means the same number of people in November as in July (about Quiet <45, Moderate 45-255, Busy 255-1,070, Very busy >1,070 per hour). 'season': percentiles within each season (peak / shoulder / off); in the off-season 52/h would be 'Busy'. 'season_hour': percentiles per season AND hour (original spec); 52 boardings at 7 pm in November is 'Very busy'. See reports/model_report.md, section 'Busyness levels'.",
+  "scheme": "capacity"
+}

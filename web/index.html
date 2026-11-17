@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toronto Ferry Forecasts: how busy the Toronto Island ferry will be</title>
+  <meta name="description" content="Hour-by-hour crowd forecasts for the Toronto Island ferries from Jack Layton Ferry Terminal: today, the next 7 days and months ahead, with the best times to go. Built on 11 years of City of Toronto ferry ticket data. Independent and open source.">
+  <link rel="canonical" href="__SITE_URL__/">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0f1e23">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Toronto Ferry Forecasts">
+  <meta property="og:title" content="Toronto Ferry Forecasts">
+  <meta property="og:description" content="How busy the Toronto Island ferry will be, hour by hour, like a weather forecast. Best times to go today and this week.">
+  <meta property="og:url" content="__SITE_URL__/">
+  <meta property="og:locale" content="en_CA">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Toronto Ferry Forecasts">
+  <meta name="twitter:description" content="How busy the Toronto Island ferry will be, hour by hour. Best times to go today and this week.">
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "WebApplication", "name": "Toronto Ferry Forecasts",
+   "url": "__SITE_URL__/", "applicationCategory": "TravelApplication", "operatingSystem": "Any",
+   "isAccessibleForFree": true, "inLanguage": "en-CA",
+   "description": "Hour-by-hour crowd forecasts for the Toronto Island ferries (Centre Island, Hanlan's Point, Ward's Island) from Jack Layton Ferry Terminal, based on City of Toronto ferry ticket counts and weather forecasts.",
+   "about": {"@type": "Place", "name": "Toronto Island Park", "address": {"@type": "PostalAddress", "addressLocality": "Toronto", "addressRegion": "ON", "addressCountry": "CA"}},
+   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CAD"}}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 20h26l-4 6H7z' fill='%231b6a74'/%3E%3Crect x='9' y='13' width='14' height='6' rx='1' fill='%231b6a74'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-head">
+      <h1>Toronto Ferry Forecasts</h1>
+      <div class="fresh" id="fresh" aria-live="polite">Loading…</div>
+    </header>
+
+    <details class="sched" id="schedule">
+      <summary id="sched-line">Loading the ferry schedule…</summary>
+      <div id="sched-body"></div>
+    </details>
+
+    <div class="tabbar">
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button role="tab" id="tab-forecast" aria-controls="p-forecast" aria-selected="true">Forecast</button>
+        <button role="tab" id="tab-deep" aria-controls="p-deep" aria-selected="false">Deep dive</button>
+      </nav>
+      <div class="seg range" id="range-seg" role="group" aria-label="Chart range">
+        <button data-v="day" aria-pressed="true">Day</button><button data-v="week" aria-pressed="false">Week</button><button data-v="month" aria-pressed="false">Month</button>
+      </div>
+    </div>
+
+    <main>
+      <!-- ============ FORECAST ============ -->
+      <section class="panel" id="p-forecast" role="tabpanel" aria-labelledby="tab-forecast">
+        <p class="kicker" id="today-date">Today</p>
+        <div class="hero">
+          <p class="headline" id="headline">Checking today's crowds…</p>
+          <div class="nowcard" id="now"><span class="muted">Right now</span><b>…</b></div>
+        </div>
+
+        <p class="chart-cap" id="chart-cap">Today, hour by hour</p>
+        <div class="chart" id="c-today" role="img" aria-label="Forecast chart"></div>
+        <p class="legend-note" id="chart-legend"></p>
+
+        <h2 class="sec">Next 7 days</h2>
+        <p class="legend-note">The badge shows the busiest hour of each day. Each square is one hour, 6 am to midnight.</p>
+        <ol class="forecast-list" id="week-list"></ol>
+        <div class="levels" id="levels"></div>
+
+        <div class="facts">
+          <div class="fact estimate" id="ret"><h3>Coming back</h3><p>Estimating return lines…</p></div>
+          <div class="fact" id="tip"><h3>Good to know</h3>
+            <p>Buying your ticket online skips the ticket-booth line, not the boarding line. On summer weekends, boardings peak from noon to 3 pm; before 9:30 am or after 6 pm they run at under half that.</p></div>
+        </div>
+
+        <p class="more"><button class="btn" id="go-deep">Dive into the data</button>
+          <span class="muted">Hour-by-hour detail, the next six months, and 11 years of history.</span></p>
+      </section>
+
+      <!-- ============ DEEP DIVE ============ -->
+      <section class="panel" id="p-deep" role="tabpanel" aria-labelledby="tab-deep" hidden>
+        <nav class="subnav" aria-label="Deep dive sections">
+          <button data-sub="week" aria-pressed="true">Next 7 days in detail</button>
+          <button data-sub="months" aria-pressed="false">Months ahead</button>
+          <button data-sub="history" aria-pressed="false">History</button>
+          <button data-sub="about" aria-pressed="false">How it works</button>
+        </nav>
+
+        <!-- week detail -->
+        <div class="sub" id="s-week">
+          <section class="block">
+            <h2>Hour by hour, next 7 days</h2>
+            <p class="sub-t">Each dot is an hour, coloured by busyness. Drag the slider to zoom in on a day. The shaded band is the likely range, which widens further out.</p>
+            <div class="chart tall" id="c-week"></div>
+          </section>
+          <section class="block">
+            <h2>Daily totals</h2>
+            <div class="chart short" id="c-week-totals"></div>
+          </section>
+          <section class="block">
+            <h2>Today against ferry capacity</h2>
+            <p class="sub-t">The background bands show how full the scheduled boats get at each level.</p>
+            <div class="chart" id="c-today-cap"></div>
+          </section>
+        </div>
+
+        <!-- months -->
+        <div class="sub" id="s-months" hidden>
+          <section class="block">
+            <h2>The next six months</h2>
+            <p class="sub-t">Typical crowds for each date, from the season, weekday, holidays and how ridership has been trending over the years. Weather is unknown this far out, so any single day can easily be 40% busier or quieter. Click a day for its hours.</p>
+            <div class="controls">
+              <span class="seg" id="months-color"><button aria-pressed="true" data-v="level">Colour by busiest hour</button><button aria-pressed="false" data-v="total">Colour by total</button></span>
+            </div>
+            <div class="chart cal" id="c-months-cal"></div>
+            <div class="daydetail" id="months-day" hidden></div>
+          </section>
+          <section class="block">
+            <h2>Week by week</h2>
+            <p class="sub-t">Expected boardings per week with the likely range.</p>
+            <div class="chart" id="c-months-weeks"></div>
+          </section>
+          <section class="block">
+            <h2>Month by month</h2>
+            <div id="months-table"></div>
+          </section>
+        </div>
+
+        <!-- history -->
+        <div class="sub" id="s-history" hidden>
+          <section class="block">
+            <h2>Boardings over time</h2>
+            <p class="sub-t">Every island-bound boarding counted since May 2015, by the period you choose. Shaded periods were closures or disrupted years and are left out.</p>
+            <div class="controls">
+              <span class="seg" id="ex-agg">
+                <button data-v="hour" aria-pressed="false">Hour</button><button data-v="day" aria-pressed="true">Day</button><button data-v="week" aria-pressed="false">Week</button><button data-v="month" aria-pressed="false">Month</button><button data-v="year" aria-pressed="false">Year</button>
+              </span>
+              <label>From <input type="date" id="ex-start"></label>
+              <label>To <input type="date" id="ex-end"></label>
+              <span class="seg" id="ex-preset">
+                <button data-v="30">30 days</button><button data-v="90">90 days</button><button data-v="365">1 year</button><button data-v="all">All</button>
+              </span>
+              <label><input type="checkbox" id="ex-sales"> Show ticket sales</label>
+            </div>
+            <div class="chart tall" id="c-timeline"></div>
+          </section>
+          <section class="block">
+            <h2>Year by year</h2>
+            <p class="sub-t">Total boardings per year and the change from the year before. 2017 (flood) and 2020-21 (pandemic) were cut short. The current year is partial.</p>
+            <div class="chart short" id="c-years"></div>
+          </section>
+          <section class="block">
+            <h2>Compare years</h2>
+            <p class="sub-t">The same weeks of different years side by side. Click a year in the legend to show or hide it.</p>
+            <div class="controls"><span class="seg" id="cmp-agg"><button data-v="week" aria-pressed="true">By week</button><button data-v="month" aria-pressed="false">By month</button></span></div>
+            <div class="chart tall" id="c-compare"></div>
+          </section>
+          <section class="block">
+            <h2>When is it busiest?</h2>
+            <p class="sub-t">Average boardings for each weekday and hour.</p>
+            <div class="controls">
+              <label>Schedule <select id="hm-period">
+                <option value="summer_peak">Peak summer</option><option value="summer">Summer</option><option value="spring">Spring</option><option value="fall">Fall</option><option value="winter">Winter</option><option value="">All year</option>
+              </select></label>
+              <label>Years <select id="hm-years"><option value="">All years</option><option value="2024,2025,2026">2024-2026</option><option value="2016,2017,2018,2019">2016-2019</option></select></label>
+            </div>
+            <div class="chart" id="c-heatmap"></div>
+          </section>
+          <section class="block">
+            <h2>A year on the calendar</h2>
+            <div class="controls"><label>Year <select id="cal-year"></select></label></div>
+            <div class="chart cal" id="c-calendar"></div>
+          </section>
+          <section class="block">
+            <h2>Holidays</h2>
+            <p class="sub-t">Boardings on each holiday, every year. Hover for how that compares with a normal day around it.</p>
+            <div class="chart tall" id="c-holidays"></div>
+          </section>
+          <section class="block">
+            <h2>What the weather does</h2>
+            <p class="sub-t">One dot per day: the day's high temperature against boardings, coloured by how much rain fell.</p>
+            <div class="controls">
+              <label>Schedule <select id="wx-period"><option value="summer_peak">Peak summer</option><option value="summer">Summer</option><option value="fall">Fall</option><option value="spring">Spring</option><option value="winter">Winter</option></select></label>
+              <span class="seg" id="wx-day"><button data-v="weekend" aria-pressed="true">Weekends and holidays</button><button data-v="weekday" aria-pressed="false">Weekdays</button></span>
+            </div>
+            <div class="chart tall" id="c-weather"></div>
+          </section>
+          <section class="block">
+            <h2>Download the data</h2>
+            <p class="sub-t">The cleaned history as CSV, for the dates chosen in "Boardings over time" above. Contains information licensed under the Open Government Licence – Toronto.</p>
+            <p><a class="btn" id="dl-daily" href="/api/download?dataset=daily">Download daily CSV</a> <a class="btn ghost" id="dl-hourly" href="/api/download?dataset=hourly">Download hourly CSV</a></p>
+          </section>
+        </div>
+
+        <!-- about -->
+        <div class="sub" id="s-about" hidden>
+          <section class="block">
+            <h2>How accurate is this?</h2>
+            <div class="kpis" id="kpis"></div>
+            <p class="note" id="acc">Live accuracy appears here once a few days of forecasts have been checked against the City's counts.</p>
+          </section>
+          <section class="block">
+            <h2>How it works</h2>
+            <ul class="tips">
+              <li>The City of Toronto publishes how many ferry tickets are scanned at Jack Layton Ferry Terminal every 15 minutes. That is everyone heading to the Island, on all three routes combined. Trips back to the city need no ticket and are not counted.</li>
+              <li>A machine-learning model (gradient-boosted trees) learned from more than eleven years of those counts, alongside the weather, holidays, school breaks, how each holiday went in past years, and how ridership has been trending year over year.</li>
+              <li>For the next 7 days it uses live weather forecasts, averaging the models that were most accurate near the terminal. Months ahead, it shows what is typical for the date.</li>
+              <li>"Busy" means compared with what the scheduled boats can carry in that hour. The same 300 people is quiet on a summer afternoon and busy on a winter evening, when only the Ward's Island boat runs.</li>
+              <li>In winter only the Ward's Island route runs. Centre Island and Hanlan's Point are served from mid-April to mid-October.</li>
+            </ul>
+          </section>
+          <section class="block">
+            <h2>The ferry schedule and fleet</h2>
+            <div id="sched-full"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p><strong>Predictions, not guarantees.</strong> An independent, open-source project, not affiliated with or endorsed by the City of Toronto. All times are Toronto time.</p>
+      <p>Contains information licensed under the Open Government Licence – Toronto. Data Source: Environment and Climate Change Canada. Weather forecasts by <a href="https://open-meteo.com/">Open-Meteo.com</a> (CC BY 4.0). Charts by <a href="https://echarts.apache.org/">Apache ECharts</a>.</p>
+      <p class="links"><a href="/docs">API</a> <a href="/api/health">Data freshness</a> <a href="https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park/all-ferry-schedules/">Official ferry schedule</a></p>
+    </footer>
+  </div>
+  <script src="/static/vendor/echarts.min.js"></script>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

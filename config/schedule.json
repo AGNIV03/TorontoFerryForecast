@@ -1,0 +1,41 @@
+{
+  "_doc": "Ferry schedule periods shown on the site. Dates and route descriptions are from the City of Toronto ferry schedule page (https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park/all-ferry-schedules/) and past published summer schedules; exact summer/spring/fall timetables are posted by the City each season. Keep period keys in sync with config/capacity.json.",
+  "source_url": "https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park/all-ferry-schedules/",
+  "periods": [
+    {"key": "winter", "name": "Winter schedule", "from": "10-14", "to": "04-14",
+     "summary": "Ward's Island route only. Centre Island and Hanlan's Point are not served.",
+     "routes": [
+       {"route": "Ward's Island", "frequency": "every 30-60 min", "first": "6:30 a.m.", "last": "11:30 p.m.",
+        "departures_from_city": ["6:30", "7:00", "7:30", "8:15", "9:00", "9:30", "10:30", "11:30", "12:00", "12:30", "13:30", "14:00", "14:30", "15:30", "16:00", "16:30", "17:30", "18:00", "18:30", "19:30", "20:30", "21:30", "22:30", "23:00", "23:30"]}
+     ]},
+    {"key": "spring", "name": "Spring schedule", "from": "04-15", "to": "05-12",
+     "summary": "Reduced trips on all three routes.",
+     "routes": [
+       {"route": "Centre Island", "frequency": "reduced, roughly hourly"},
+       {"route": "Hanlan's Point", "frequency": "reduced, roughly hourly"},
+       {"route": "Ward's Island", "frequency": "every 30-60 min"}
+     ]},
+    {"key": "summer", "name": "Summer schedule", "from": "05-13", "to": "09-15",
+     "summary": "All three routes. Peak summer (school break to Labour Day) adds Centre Island sailings as crowds require.",
+     "routes": [
+       {"route": "Centre Island", "frequency": "every 15-40 min", "first": "about 8:00 a.m.", "last": "about 11:00 p.m."},
+       {"route": "Hanlan's Point", "frequency": "every 30-45 min", "first": "about 6:45 a.m.", "last": "about 10:45 p.m."},
+       {"route": "Ward's Island", "frequency": "every 30-60 min", "first": "6:30 a.m.", "last": "about 11:30 p.m."}
+     ]},
+    {"key": "fall", "name": "Fall schedule", "from": "09-16", "to": "10-13",
+     "summary": "Reduced trips on all three routes.",
+     "routes": [
+       {"route": "Centre Island", "frequency": "reduced, roughly hourly"},
+       {"route": "Hanlan's Point", "frequency": "reduced, roughly hourly"},
+       {"route": "Ward's Island", "frequency": "every 30-60 min"}
+     ]}
+  ],
+  "fleet": [
+    {"vessel": "Sam McBride", "built": 1939, "passengers": 908},
+    {"vessel": "Thomas Rennie", "built": 1951, "passengers": 908},
+    {"vessel": "William Inglis", "built": 1935, "passengers": 395},
+    {"vessel": "Ongiara", "built": 1963, "passengers": 216, "note": "also carries vehicles"},
+    {"vessel": "Lady of the Quays", "built": 2026, "passengers": 1300, "note": "new electric ferry, in service 2027 (expected)"},
+    {"vessel": "Toronto Islander", "built": 2027, "passengers": 1300, "note": "new electric ferry, in service late 2027 (expected)"}
+  ]
+}

@@ -1,0 +1,62 @@
+# Toronto Island Ferry Crowd Forecaster
+#   docker compose run --rm worker python -m ops.bootstrap     # first run (backfill + train)
+#   docker compose up -d                                        # api + scheduler
+#   docker compose --profile tunnel up -d                       # ...plus a Cloudflare tunnel container
+services:
+  worker:
+    build: .
+    image: ferry-forecaster:latest
+    command: ["python", "-m", "ops.scheduler"]
+    env_file: [.env]
+    environment:
+      - TZ=America/Toronto
+      - FERRY_THREADS=${FERRY_THREADS:-2}
+    # shared server: keep training from starving other services
+    mem_limit: ${WORKER_MEM_LIMIT:-3g}
+    cpus: ${WORKER_CPUS:-2}
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    stop_grace_period: 60s
+    logging:
+      driver: json-file
+      options: {max-size: "20m", max-file: "5"}
+
+  api:
+    build: .
+    image: ferry-forecaster:latest
+    depends_on: [worker]
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000",
+              "--proxy-headers", "--forwarded-allow-ips", "*", "--workers", "2"]
+    volumes:
+      - ./data:/data:ro
+    read_only: true
+    tmpfs: [/tmp]
+    environment:
+      - TZ=America/Toronto
+      - SITE_URL=${SITE_URL:-https://ferries.agniv.site}
+    mem_limit: 512m
+    # only reachable from the host; the public entry point is the Cloudflare tunnel
+    ports:
+      - "127.0.0.1:${API_PORT:-8093}:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/forecast?days=1', timeout=5)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options: {max-size: "20m", max-file: "5"}
+
+  # Optional: run the tunnel in compose instead of a cloudflared service on the host.
+  # Create a tunnel in the Cloudflare dashboard, route your hostname to http://api:8000,
+  # and put its token in .env as CLOUDFLARE_TUNNEL_TOKEN.
+  cloudflared:
+    image: cloudflare/cloudflared:2025.10.0
+    profiles: ["tunnel"]
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on: [api]
+    restart: unless-stopped

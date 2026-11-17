@@ -1,0 +1,22 @@
+{
+  "_doc": "Island-bound passenger capacity per hour, used to turn forecast boardings into busyness levels (share of practical capacity). See README 'Busyness levels' and reports/model_report.md. Sources: City of Toronto fleet page (Ongiara 216, William Inglis 395, Sam McBride 908, Thomas Rennie 908 passengers; new electric ferries 1,300 from 2027) and the City ferry schedule page (winter Oct 14 - mid-April: Ward's Island only, ~25 departures/day; spring/fall: reduced trips on all routes; summer mid-May - mid-September: all routes, Centre Island every 15-40 min). Nominal = vessels x departures per hour; practical = nominal x load_factor (boats are never 100% full in practice). The busiest hour ever recorded (3,737 boardings, 2026-07-11 13:00) is ~77% of the peak-summer nominal capacity.",
+  "load_factor": 0.8,
+  "level_shares": {"moderate": 0.2, "busy": 0.4, "very_busy": 0.65},
+  "_level_shares_doc": "Share of PRACTICAL capacity at which each level starts. Most riders take the Centre Island boats, which fill first: at 65% of practical capacity in peak summer (~2,500 boardings/h) the Centre boats are near-full and people start waiting for the next one, matching reports of 30-60 min waits on summer weekends. Busy (40%, ~1,550/h in peak summer) = lines at the gates, boats filling. Moderate (20%) = steady but walk-on.",
+  "periods": {
+    "winter":      {"from": "10-14", "to": "04-14", "nominal_per_hour": 750,
+                    "basis": "Ward's Island only: William Inglis (395) or Ongiara (216), up to ~2 departures/h midday"},
+    "spring":      {"from": "04-15", "to": "05-12", "nominal_per_hour": 2100,
+                    "basis": "reduced trips, all routes: one 908-seat boat ~1.3/h to Centre, Inglis ~1/h, Ongiara ~1.5/h"},
+    "summer":      {"from": "05-13", "to": "09-15", "nominal_per_hour": 3400,
+                    "basis": "all routes, Centre Island every 30-40 min with two 908-seat boats, Hanlan's/Ward's every 30-60 min"},
+    "summer_peak": {"school_summer": true, "nominal_per_hour": 4850,
+                    "basis": "school summer break to Labour Day: Centre every 15-30 min (2 x 908 seats x 2/h), Inglis 2/h to Hanlan's, Ongiara 2/h to Ward's"},
+    "fall":        {"from": "09-16", "to": "10-13", "nominal_per_hour": 2100,
+                    "basis": "reduced trips, all routes (as spring)"}
+  },
+  "overrides": [
+    {"start": "2022-08-20", "end": "2022-09-05", "key": "summer_peak|minus_mcbride", "nominal_per_hour": 3030,
+     "basis": "Sam McBride (908) out of service after the 2022-08-20 dock crash; modified schedule for the rest of the summer (Global News, 2022-08-21)"}
+  ]
+}

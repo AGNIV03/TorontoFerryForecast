@@ -1,0 +1,9 @@
+{
+  "_doc": "Assumptions for the return-trip (island -> city) estimate. There is NO ground truth for returns (they need no ticket), so this is a rough warning only. See README 'Return-trip estimate'.",
+  "stay_hours_median": 4.0,
+  "stay_hours_sigma": 0.55,
+  "min_stay_hours": 0.75,
+  "last_departure_hour": 23.75,
+  "heavy_share_of_peak": 0.85,
+  "earliest_report_hour": 12
+}
